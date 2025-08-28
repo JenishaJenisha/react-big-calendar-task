@@ -24,9 +24,10 @@ const DataModal = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        zIndex: 9999,
       }}
     >
-      <div style={{ background: "white", padding: "20px", borderRadius: "8px" }}>
+      <div style={{ background: "white", padding: "20px", borderRadius: "8px" ,boxShadow: "0 4px 10px rgba(0,0,0,0.3)", zIndex: 9999,}}>
         <h3>Data for {selectedDate}</h3>
         {dataForDate.length > 0 ? (
           <BarChart width={400} height={300} data={dataForDate}>
@@ -39,7 +40,16 @@ const DataModal = () => {
         ) : (
           <p style={{ color: "red" }}>⚠️ No data found for the selected date.</p>
         )}
-        <button onClick={() => dispatch(clearSelectedDate())}>Close</button>
+        <button onClick={() => dispatch(clearSelectedDate())}
+          style={{
+            marginTop: "15px",
+            padding: "8px 16px",
+            border: "none",
+            borderRadius: "4px",
+            backgroundColor: "#8884d8",
+            color: "white",
+            cursor: "pointer",
+          }}>Close</button>
       </div>
     </div>
   );
