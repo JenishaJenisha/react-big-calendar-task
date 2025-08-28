@@ -1,4 +1,3 @@
-// src/components/DataModal.jsx
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
@@ -8,9 +7,15 @@ import dummyData from "../data/dummyData";
 const DataModal = () => {
   const dispatch = useDispatch();
   const selectedDate = useSelector((state) => state.calendar.selectedDate);
-  const dataForDate = dummyData[selectedDate] || [];
+  const rawDataForDate = dummyData[selectedDate] || [];
 
   if (!selectedDate) return null;
+
+  // 🔄 Transform data for recharts
+  const dataForChart = rawDataForDate.map((obj) => {
+    const [key, value] = Object.entries(obj)[0];
+    return { name: key, value };
+  });
 
   return (
     <div
@@ -27,20 +32,31 @@ const DataModal = () => {
         zIndex: 9999,
       }}
     >
-      <div style={{ background: "white", padding: "20px", borderRadius: "8px" ,boxShadow: "0 4px 10px rgba(0,0,0,0.3)", zIndex: 9999,}}>
+      <div
+        style={{
+          background: "white",
+          padding: "20px",
+          borderRadius: "8px",
+          boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+          zIndex: 9999,
+        }}
+      >
         <h3>Data for {selectedDate}</h3>
-        {dataForDate.length > 0 ? (
-          <BarChart width={400} height={300} data={dataForDate}>
+        {dataForChart.length > 0 ? (
+          <BarChart width={400} height={300} data={dataForChart}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey={(d) => Object.keys(d)[0]} />
+            <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Bar dataKey={(d) => Object.keys(d)[0]} fill="#8884d8" />
+            <Bar dataKey="value" fill="#8884d8" />
           </BarChart>
         ) : (
-          <p style={{ color: "red" }}>⚠️ No data found for the selected date.</p>
+          <p style={{ color: "red" }}>
+            ⚠️ No data found for the selected date.
+          </p>
         )}
-        <button onClick={() => dispatch(clearSelectedDate())}
+        <button
+          onClick={() => dispatch(clearSelectedDate())}
           style={{
             marginTop: "15px",
             padding: "8px 16px",
@@ -49,7 +65,10 @@ const DataModal = () => {
             backgroundColor: "#8884d8",
             color: "white",
             cursor: "pointer",
-          }}>Close</button>
+          }}
+        >
+          Close
+        </button>
       </div>
     </div>
   );
