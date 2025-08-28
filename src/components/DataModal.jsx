@@ -1,0 +1,48 @@
+// src/components/DataModal.jsx
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import { clearSelectedDate } from "../redux/calendarSlice";
+import dummyData from "../data/dummyData";
+
+const DataModal = () => {
+  const dispatch = useDispatch();
+  const selectedDate = useSelector((state) => state.calendar.selectedDate);
+  const dataForDate = dummyData[selectedDate] || [];
+
+  if (!selectedDate) return null;
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: "0",
+        left: "0",
+        right: "0",
+        bottom: "0",
+        backgroundColor: "rgba(0,0,0,0.5)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <div style={{ background: "white", padding: "20px", borderRadius: "8px" }}>
+        <h3>Data for {selectedDate}</h3>
+        {dataForDate.length > 0 ? (
+          <BarChart width={400} height={300} data={dataForDate}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey={(d) => Object.keys(d)[0]} />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey={(d) => Object.keys(d)[0]} fill="#8884d8" />
+          </BarChart>
+        ) : (
+          <p style={{ color: "red" }}>⚠️ No data found for the selected date.</p>
+        )}
+        <button onClick={() => dispatch(clearSelectedDate())}>Close</button>
+      </div>
+    </div>
+  );
+};
+
+export default DataModal;
