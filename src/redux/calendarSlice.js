@@ -17,8 +17,11 @@ const calendarSlice = createSlice({
     setEvents: (state, action) => {
       state.events = action.payload;
     },
+    clearSelectedDate: (state) => {
+      state.selectedDate = null;
+    },
   },
 });
 
-export const { setSelectedDate, setEvents } = calendarSlice.actions;
+export const { setSelectedDate, setEvents,clearSelectedDate } = calendarSlice.actions;
 export default calendarSlice.reducer;
